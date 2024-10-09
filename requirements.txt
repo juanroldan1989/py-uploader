@@ -1,0 +1,5 @@
+Flask==2.0.1
+Flask-SQLAlchemy==2.5.1
+Flask-WTF==0.15.1
+boto3==1.18.69
+psycopg2==2.9.1
