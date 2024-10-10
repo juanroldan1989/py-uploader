@@ -4,13 +4,20 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Uploaded Files</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 </head>
-<body>
-    <h1>Uploaded Files</h1>
-    <ul>
-        {% for file in files %}
-        <li><a href="{{ file.s3_url }}">{{ file.filename }}</a></li>
-        {% endfor %}
-    </ul>
+<body class="bg-gray-100">
+
+    <div class="max-w-2xl mx-auto mt-10 p-6 bg-white shadow-lg rounded-lg">
+        <h1 class="text-3xl font-semibold text-center mb-6">Uploaded Files</h1>
+        <ul class="list-disc pl-6">
+            {% for file in files %}
+            <li class="mb-2">
+                <a href="{{ file.s3_url }}" class="text-blue-500 hover:underline">{{ file.filename }}</a>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+
 </body>
 </html>
