@@ -2,6 +2,39 @@
 
 The app interacts with a PostgreSQL database, stores files in an S3 bucket, and presents a UI to users.
 
+## Startup
+
+```ruby
+$ docker-compose up
+```
+
+Access: `http://localhost:5000`
+
+1. Upload file
+2. Check S3 bucket
+3. Adjust source code as needed
+4. Run `docker-compose up` again
+
+## ENV variables
+
+You can set these in your environment or .env file.
+
+```ruby
+# Flask settings
+FLASK_SECRET = 'flask_secret key'
+
+# AWS credentials
+AWS_ACCESS_KEY = 'aws_access_key'
+AWS_SECRET_KEY = 'aws_secret_key'
+S3_BUCKET_NAME = 's3_bucket_name'
+
+# PostgreSQL settings
+POSTGRES_USER = 'postgres_user'
+POSTGRES_PASSWORD = 'postgres_password'
+POSTGRES_HOST = 'localhost'
+POSTGRES_DB = 'postgres_db'
+```
+
 ## S3 Bucket setup
 
 Python script added `(scripts/check_s3_bucket.py)` to:
@@ -12,26 +45,27 @@ Python script added `(scripts/check_s3_bucket.py)` to:
 
 ### Usage
 
-1. Environment Variables: The script reads the AWS access key, secret key, and S3 bucket name from environment variables. You can set these in your environment or .env file.
+1. Make sure `boto3` is installed:
 
 ```ruby
-export AWS_ACCESS_KEY='your_access_key'
-export AWS_SECRET_KEY='your_secret_key'
-export S3_BUCKET_NAME='your_bucket_name'
-```
-
-2. or set those up within an `.env` file.
-
-3. Make sure `boto3` is installed:
-
-```
 pip install boto3
 ```
 
-4. Trigger script:
+2. Trigger script:
 
-```
-python check_create_s3_bucket.py
+```ruby
+# Usage:
+python check_s3_bucket.py
+
+# Input:
+Enter a unique bucket name: my-unique-bucket
+
+# Output:
+Checking if bucket 'my-unique-bucket' exists ...
+
+Bucket 'my-unique-bucket' does not exist. Creating bucket ...
+Bucket 'my-unique-bucket' created sucessfully.
+Bucket URL: https://my-unique-bucket.s3.amazonaws.com/
 ```
 
 ## Flask Secret Key
@@ -46,13 +80,21 @@ import secrets
 secret_key = secrets.token_hex(16)  # Generates a random 32-character hex string
 ```
 
-## ENV variables
-
-There are `.env` or `.flaskenv` files present. Do `pip install python-dotenv` to use them.
-
 ## Database
 
-If postgres_db does not exist, you can create it manually. Open a terminal and connect to PostgreSQL:
+### Docker Compose
+
+`docker-compose.yaml` file already provides everything needed for database setup
+
+```ruby
+$ docker-compose up
+```
+
+Access: `http://localhost:5000`
+
+### Local setup
+
+If `postgres_db` does not exist, you can create it manually. Open a terminal and connect to `PostgreSQL`:
 
 ```ruby
 psql -U your_postgres_username
@@ -67,9 +109,25 @@ CREATE DATABASE postgres_db;
 Then check for connection to the database:
 
 ```ruby
-psql -U juan -d postgres_db
-psql (14.7 (Homebrew), server 12.1)
-Type "help" for help.
+psql -U postgres_user -d postgres_db
 
 postgres_db=# \dt
+```
+
+## WSGI
+
+To improve the production-readiness of the `Flask` application, an `WSGI` server like `Gunicorn` is added.
+
+Gunicorn is a Python WSGI HTTP server that serves Flask applications more efficiently in production environments.
+
+1. Add `gunicorn==x.x.x` within `requirements.txt`
+2. Add WSGI Entry point:
+
+```ruby
+# wsgi.py
+
+from app import app
+
+if __name__ = "__main__":
+  app.run()
 ```
