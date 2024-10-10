@@ -1,0 +1,41 @@
+# Dockerfile uses python:3.9-alpine image as the base image.
+
+# The Alpine Linux distribution is smaller than the Debian-based Slim image,
+# which makes it a better choice for production environments.
+
+# Also the installation of system dependencies, build tools, and cleanup steps
+# are included within a single RUN instruction to reduce the number of layers in the image.
+
+# This helps to keep the image size small and improves the build time.
+
+# Use a smaller base image
+FROM python:3.9-alpine
+
+# Set the working directory
+WORKDIR /app
+
+# Install system dependencies, build tools, and clean up cache in the same step
+RUN apk update && apk add --no-cache \
+  gcc \
+  musl-dev \
+  postgresql-dev \
+  && rm -rf /var/cache/apk/*
+
+# Copy the requirements file into the container
+COPY requirements.txt /app/requirements.txt
+
+# Install Python dependencies without cache
+RUN pip install --no-cache-dir -r /app/requirements.txt
+
+# Copy the current directory contents into the container
+COPY . /app
+
+# Set environment variables
+ENV FLASK_APP=app.py
+ENV FLASK_RUN_HOST=0.0.0.0
+
+# Expose the port the app runs on
+EXPOSE 5000
+
+# Run the Flask application
+CMD ["flask", "run"]
