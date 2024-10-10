@@ -1,7 +1,24 @@
+# Creates a S3 Bucket and returns the bucket URL
+#
+# Usage:
+# python check_s3_bucket.py
+#
+# Input:
+# Enter a unique bucket name: my-unique-bucket
+
+# Output:
+# Checking if bucket 'my-unique-bucket' exists ...
+
+# Bucket 'my-unique-bucket' does not exist. Creating bucket ...
+# Bucket 'my-unique-bucket' created sucessfully.
+# Bucket URL: https://my-unique-bucket.s3.amazonaws.com/
+
 import boto3
 import botocore
 
-from config import AWS_ACCESS_KEY, AWS_SECRET_KEY
+# AWS credentials
+AWS_ACCESS_KEY = "xxxxx"
+AWS_SECRET_KEY = "yyyyy"
 
 # Initialize a session using AWS credentials
 session = boto3.Session(
