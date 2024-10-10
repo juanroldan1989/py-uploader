@@ -1,20 +1,28 @@
 from flask import Flask, render_template, redirect, url_for, flash
 from flask_sqlalchemy import SQLAlchemy
+from markupsafe import Markup
 
 import boto3
 import os
 
-from models import FileRecord
+# from models import FileRecord
 from forms import UploadForm
 from config import AWS_ACCESS_KEY, AWS_SECRET_KEY, S3_BUCKET_NAME, S3_BUCKET_URL, FLASK_SECRET_KEY, POSTGRES_URI
 
 # Initialize Flask app
 app = Flask(__name__)
+
 app.config['SQLALCHEMY_DATABASE_URI'] = POSTGRES_URI
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SECRET_KEY'] = FLASK_SECRET_KEY
 
 db = SQLAlchemy(app)
+
+# Model representing a file record in the database
+class FileRecord(db.Model):
+  id = db.Column(db.Integer, primary_key=True)
+  filename = db.Column(db.String(120), nullable=False)
+  s3_url = db.Column(db.String(200), nullable=False)
 
 # Initialize S3 client
 s3 = boto3.client(

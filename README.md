@@ -45,3 +45,7 @@ import secrets
 
 secret_key = secrets.token_hex(16)  # Generates a random 32-character hex string
 ```
+
+## ENV variables
+
+There are .env or .flaskenv files present. Do "pip install python-dotenv" to use them.
