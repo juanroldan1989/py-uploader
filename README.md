@@ -48,4 +48,28 @@ secret_key = secrets.token_hex(16)  # Generates a random 32-character hex string
 
 ## ENV variables
 
-There are .env or .flaskenv files present. Do "pip install python-dotenv" to use them.
+There are `.env` or `.flaskenv` files present. Do `pip install python-dotenv` to use them.
+
+## Database
+
+If postgres_db does not exist, you can create it manually. Open a terminal and connect to PostgreSQL:
+
+```ruby
+psql -U your_postgres_username
+```
+
+Then create the postgres_db:
+
+```ruby
+CREATE DATABASE postgres_db;
+```
+
+Then check for connection to the database:
+
+```ruby
+psql -U juan -d postgres_db
+psql (14.7 (Homebrew), server 12.1)
+Type "help" for help.
+
+postgres_db=# \dt
+```

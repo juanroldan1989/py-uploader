@@ -1,3 +1,4 @@
 Pipfile
 .env
 __pycache__
+uploads/*

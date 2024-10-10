@@ -47,7 +47,7 @@ def upload_file():
     s3.upload_file(file_path, S3_BUCKET_NAME, file.filename)
 
     # Save file metadata to PostgreSQL database
-    new_file = FileRecord(file_name=file.filename, s3_url=f"{S3_BUCKET_URL}/{file.filename}")
+    new_file = FileRecord(filename=file.filename, s3_url=f"{S3_BUCKET_URL}/{file.filename}")
 
     db.session.add(new_file)
     db.session.commit()
