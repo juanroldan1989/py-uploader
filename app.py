@@ -57,7 +57,13 @@ def upload_file():
     db.session.commit()
 
     flash("File uploaded successfully")
-    return redirect(url_for("upload_file"))
+    return redirect(url_for("list_files"))
+
+  else:
+    for field, errors in form.errors.items():
+      for error in errors:
+        flash("Please fix the following errors:")
+        flash(f"{getattr(form, field).label.text}: {error}")
 
   return render_template("upload.html", form=form)
 

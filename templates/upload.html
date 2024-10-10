@@ -1,26 +1,36 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>File Upload</title>
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>File Upload</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 </head>
 <body class="bg-gray-100">
+  <div class="max-w-2xl mx-auto mt-10 p-6 bg-white shadow-lg rounded-lg">
+    <h1 class="text-3xl font-semibold text-center mb-6">Upload a File</h1>
+    <form method="POST" enctype="multipart/form-data">
+      {{ form.hidden_tag() }}
 
-    <div class="max-w-2xl mx-auto mt-10 p-6 bg-white shadow-lg rounded-lg">
-        <h1 class="text-3xl font-semibold text-center mb-6">Upload a File</h1>
-        <form method="POST" enctype="multipart/form-data">
-            {{ form.hidden_tag() }}
-            <div class="mb-4">
-                <label class="block text-gray-700 text-sm font-bold mb-2">{{ form.file.label }}:</label>
-                {{ form.file(class_="block w-full text-sm text-gray-900 border rounded-lg cursor-pointer focus:outline-none bg-gray-50") }}
-            </div>
-            <div class="text-center">
-                {{ form.submit(class_="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded") }}
-            </div>
-        </form>
-    </div>
+      {% with messages = get_flashed_messages() %}
+        {% if messages %}
+          <ul class="flashes">
+            {% for message in messages %}
+              <li>{{ message }}</li>
+            {% endfor %}
+          </ul>
+        {% endif %}
+      {% endwith %}
 
+      <div class="mb-4">
+        <label class="block text-gray-700 text-sm font-bold mb-2">{{ form.file.label }}:</label>
+        {{ form.file(class_="block w-full text-sm text-gray-900 border rounded-lg cursor-pointer focus:outline-none bg-gray-50") }}
+      </div>
+
+      <div class="text-center">
+        {{ form.submit(class_="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded") }}
+      </div>
+    </form>
+  </div>
 </body>
 </html>

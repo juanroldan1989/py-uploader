@@ -8,16 +8,27 @@
 </head>
 <body class="bg-gray-100">
 
-    <div class="max-w-2xl mx-auto mt-10 p-6 bg-white shadow-lg rounded-lg">
-        <h1 class="text-3xl font-semibold text-center mb-6">Uploaded Files</h1>
-        <ul class="list-disc pl-6">
-            {% for file in files %}
-            <li class="mb-2">
-                <a href="{{ file.s3_url }}" class="text-blue-500 hover:underline">{{ file.filename }}</a>
-            </li>
-            {% endfor %}
+  <div class="max-w-2xl mx-auto mt-10 p-6 bg-white shadow-lg rounded-lg">
+    <h1 class="text-3xl font-semibold text-center mb-6">Uploaded Files</h1>
+
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <ul class="flashes">
+          {% for message in messages %}
+          <li>{{ message }}</li>
+          {% endfor %}
         </ul>
-    </div>
+      {% endif %}
+    {% endwith %}
+
+    <ul class="list-disc pl-6">
+      {% for file in files %}
+      <li class="mb-2">
+        <a href="{{ file.s3_url }}" class="text-blue-500 hover:underline">{{ file.filename }}</a>
+      </li>
+      {% endfor %}
+    </ul>
+  </div>
 
 </body>
 </html>
