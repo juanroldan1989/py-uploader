@@ -1,15 +1,18 @@
-# Dockerfile uses a multi-stage build to separate the build dependencies
-# from the runtime dependencies.
+# Dockerfile enhances security while keeping the image size small.
 
-# The first stage, named `builder`:
-# - installs the build dependencies and
-# - copies the requirements file into the container.
+# Non-root User:
+# The nonrootuser is created with its own home directory.
+# The application will run as this non-root user,
+# which is a standard security measure to prevent privilege escalation in the event of an exploit.
 
-# It then installs the Python dependencies into a separate directory (`/install`)
-# using the --prefix option for pip.
+# Controlled Permissions:
+# The COPY command uses --chown to ensure that the non-root user owns the application files.
+# This helps avoid issues where root is the owner but
+# the application is running as a non-root user.
 
-# This isolates the installed dependencies from the rest of the system
-# and allows you to copy only the necessary components to the final image.
+# Reduced apt-get usage:
+# Installed only necessary packages (e.g., libpq5) in the final image,
+# ensuring minimal exposure to security vulnerabilities in unused packages.
 
 # Stage 1: Build stage
 FROM python:3.9-slim as builder
@@ -38,11 +41,15 @@ WORKDIR /app
 RUN apt-get update && apt-get install -y libpq5 \
   && rm -rf /var/lib/apt/lists/*
 
-# Copy only the installed dependencies from the builder stage
-COPY --from=builder /install /usr/local
+# Create a non-root user and group, and set permissions
+RUN useradd -m -d /home/nonrootuser nonrootuser
+USER nonrootuser
 
-# Copy the application code
-COPY . /app
+# Copy only the installed dependencies from the builder stage, adjust ownership
+COPY --from=builder --chown=nonrootuser:nonrootuser /install /usr/local
+
+# Copy the application code and set correct ownership and permissions
+COPY --chown=nonrootuser:nonrootuser . /app
 
 # Set environment variables
 ENV FLASK_APP=app.py
@@ -50,6 +57,9 @@ ENV FLASK_RUN_HOST=0.0.0.0
 
 # Expose the port the app runs on
 EXPOSE 5000
+
+# Use non-root user to run the application
+USER nonrootuser
 
 # Run the Flask application
 CMD ["flask", "run"]
