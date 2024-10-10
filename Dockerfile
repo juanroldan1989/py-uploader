@@ -61,5 +61,8 @@ EXPOSE 5000
 # Use non-root user to run the application
 USER nonrootuser
 
+# Set the entrypoint to run the script
+ENTRYPOINT ["/app/entrypoint.sh"]
+
 # Run the Flask application
 CMD ["flask", "run"]

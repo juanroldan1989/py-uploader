@@ -1,5 +1,6 @@
 from flask import Flask, render_template, redirect, url_for, flash
 from flask_sqlalchemy import SQLAlchemy
+from flask_migrate import Migrate
 from markupsafe import Markup
 
 import boto3
@@ -17,6 +18,9 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SECRET_KEY'] = FLASK_SECRET_KEY
 
 db = SQLAlchemy(app)
+
+# Set up Flask-Migrate
+migrate = Migrate(app, db)
 
 # Model representing a file record in the database
 class FileRecord(db.Model):

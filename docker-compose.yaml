@@ -14,7 +14,6 @@ services:
 
   flask_app:
     build: .
-    command: flask run --host=0.0.0.0
     volumes:
       - .:/app
     ports:
@@ -29,10 +28,10 @@ services:
 
       POSTGRES_USER: "user"
       POSTGRES_PASSWORD: "password"
-      POSTGRES_HOST: "localhost"
+      POSTGRES_HOST: "postgres"
       POSTGRES_DB: "mydb"
 
-    depends_on:
+    links:
       - postgres
 
 volumes:
