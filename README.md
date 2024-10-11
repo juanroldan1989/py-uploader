@@ -6,6 +6,10 @@ The app interacts with a PostgreSQL database, stores files in an S3 bucket, and 
 
 Deployment is **automated** through **Github Actions** with:
 
+![Screenshot 2024-10-11 at 13 48 52](https://github.com/user-attachments/assets/8412832d-31c8-41fe-8474-d5282280539a)
+
+<img width="1143" alt="Screenshot 2024-10-11 at 13 50 02" src="https://github.com/user-attachments/assets/cba352ae-d3f5-48dc-a19d-314b9ba6cc4f">
+
 1. Flask source code **linting** validation and **tests**
 2. Infrastructure provisioning through **Terraform**
 3. **Networking** (VPC + Subnets + ALB)
