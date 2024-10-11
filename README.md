@@ -1,3 +1,5 @@
+<img width="621" alt="Screenshot 2024-10-11 at 17 40 41" src="https://github.com/user-attachments/assets/b9e259ee-e9ba-4934-90d5-0707165f1d26">
+
 <h4 align="center">Image Uploader | S3/Postgres integration | E2E Deployment through Github Actions | Terraform </h4>
 
 <p align="center">
