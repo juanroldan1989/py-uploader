@@ -45,6 +45,20 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ env.AWS_REGION }}
 
+      - name: Check if ECR Registry exists, create if not
+        run: |
+          REPOSITORY_NAME=${{ inputs.image-name }}
+          AWS_REGION="${{ env.AWS_REGION }}"
+
+          # Check if the repository exists
+          if aws ecr describe-repositories --repository-names "$REPOSITORY_NAME" --region "$AWS_REGION" > /dev/null 2>&1; then
+            echo "ECR repository '$REPOSITORY_NAME' already exists."
+          else
+            echo "ECR repository '$REPOSITORY_NAME' does not exist. Creating..."
+            aws ecr create-repository --repository-name "$REPOSITORY_NAME" --region "$AWS_REGION"
+            echo "ECR repository '$REPOSITORY_NAME' created."
+          fi
+
       - name: "Login, Build and Tag Docker image"
         run: |
           aws ecr get-login-password --region ${{ env.AWS_REGION }} | docker login --username AWS --password-stdin ${{ env.ECR_REGISTRY }}
