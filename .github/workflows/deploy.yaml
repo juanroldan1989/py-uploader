@@ -87,6 +87,21 @@ jobs:
           terraform init
           terraform apply --auto-approve
 
+      - name: Health Check - Verify Application Status
+        run: |
+          ALB_DNS_NAME=$(terraform output -raw alb_dns_name)
+
+          echo "Checking health of the application at http://$ALB_DNS_NAME/"
+
+          STATUS_CODE=$(curl --write-out "%{http_code}" --silent --output /dev/null http://$ALB_DNS_NAME/)
+
+          if [ "$STATUS_CODE" -ne 200 ]; then
+            echo "Health check failed. Status code: $STATUS_CODE"
+            exit 1
+          else
+            echo "Health check passed. Application is up and running!"
+          fi
+
       - name: Set Slack `message` and `title` on success
         if: success()
         run: |
