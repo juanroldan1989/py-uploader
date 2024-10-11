@@ -53,7 +53,6 @@ COPY --chown=nonrootuser:nonrootuser /flask /app
 
 # Set environment variables
 ENV FLASK_APP=app.py
-ENV FLASK_RUN_HOST=0.0.0.0
 
 # Expose the port the app runs on
 EXPOSE 5000
@@ -66,4 +65,5 @@ ENTRYPOINT ["flask/entrypoint.sh"]
 
 # Run the Flask application
 # CMD ["flask", "run"]
-CMD ["gunicorn", "-w", "4", "-b", "0.0.0.0:5000", "wsgi:app"]
+
+CMD ["gunicorn", "-w 3", "-t 60", "-b 0.0.0.0:5000", "wsgi:app"]

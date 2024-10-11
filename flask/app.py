@@ -36,7 +36,7 @@ s3 = boto3.client(
 )
 
 # Route for uploading files
-@app.route("/upload", methods=["GET", "POST"])
+@app.route("/", methods=["GET", "POST"])
 def upload_file():
   form = UploadForm()
 
