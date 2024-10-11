@@ -2,7 +2,82 @@
 
 The app interacts with a PostgreSQL database, stores files in an S3 bucket, and presents a UI to users.
 
-## Startup
+# Production
+
+Application deployment is automated through **Github Actions** with:
+
+1. Flask source code **linting** validation and **tests**
+2. Infrastructure provisioning through **Terraform**
+3. **Networking** (VPC + Subnets + ALB)
+4. **AWS ECS Fargate**: 2 ECS Services with 1 ECS Task each.
+5. Docker images **build/tag** process
+6. Docker images **validation** through **Trivy** (security) and **Dockle** (best practices)
+7. **ECR (Elastic Container Registry)** storing each image with versioning: **py-uploader-flask** and **py-uploader-nginx**
+8. **Health checks** included after deployment.
+9. **Slack** notifications for success/failures scenarios on Docker images **build/push** workflows.
+10. **Slack** notifications for success/failures scenarios on Docker images security and best practices.
+11. **Slack** notifications for success/failures scenarios on Deployment.
+
+## Provision Infrastructure
+
+### Docker Images (build/push)
+
+1. Build `nginx` image and push to Docker Hub (or other registry like `ECR`)
+
+```ruby
+$ cd nginx
+
+$ docker build -t <username>/py-uploader-nginx .
+$ docker push <username>/py-uploader-nginx:latest
+```
+
+2. Build `py-uploader` image and push to Docker Hub (or other registry like `ECR`)
+
+```ruby
+$ docker build -t <username>/py-uploader-flask .
+$ docker push <username>/py-uploader-flask:latest
+```
+
+### Terraform
+
+1. Change dir to a project `infra`
+2. Run commands:
+
+```ruby
+$ terraform init
+$ terraform apply
+```
+
+3. Check `output` section
+
+```ruby
+alb_dns_name = "ecs-alb-<account-id>.<region-id>.elb.amazonaws.com"
+```
+
+4. Available endpoints are:
+
+- `GET /upload` -> Upload files to S3 Bucket
+
+- `GET /files` -> List of files uploaded
+
+5. Delete infrastructure
+
+To remove all infrastructure managed by Terraform:
+
+```ruby
+$ terraform destroy
+```
+
+# Dockerfile
+
+- `docker` folder contains iterations of Dockerfiles with improvements on each step
+
+- `Dockerfile` located at `root` path is the latest and best version because:
+
+1. Enhances security using `nonroot` user and `controlled permissions`.
+2. Keeps the image size small implementing a `multi-stage` build and reduced `apt-get` usage.
+
+# Development
 
 ```ruby
 $ docker-compose up
@@ -12,10 +87,10 @@ Access: `http://localhost:5000`
 
 1. Upload file
 2. Check S3 bucket
-3. Adjust source code as needed
+3. Adjust source code as needed within `flask` folder.
 4. Run `docker-compose up` again
 
-## ENV variables
+### ENV variables
 
 You can set these in your environment or .env file.
 
@@ -35,7 +110,7 @@ POSTGRES_HOST = 'localhost'
 POSTGRES_DB = 'postgres_db'
 ```
 
-## S3 Bucket setup
+### S3 Bucket setup
 
 Python script added `(scripts/check_s3_bucket.py)` to:
 
@@ -43,7 +118,7 @@ Python script added `(scripts/check_s3_bucket.py)` to:
 2. Create S3 Bucket if it does not exist yet
 3. Return S3 Bucket location
 
-### Usage
+#### Usage
 
 1. Make sure `boto3` is installed:
 
@@ -68,21 +143,9 @@ Bucket 'my-unique-bucket' created sucessfully.
 Bucket URL: https://my-unique-bucket.s3.amazonaws.com/
 ```
 
-## Flask Secret Key
+### Database
 
-- Always use a strong, unpredictable value for your SECRET_KEY. It should be a long string of random characters.
-
-- You can generate a secret key using tools like Python's secrets module:
-
-```ruby
-import secrets
-
-secret_key = secrets.token_hex(16)  # Generates a random 32-character hex string
-```
-
-## Database
-
-### Docker Compose
+#### Docker Compose
 
 `docker-compose.yaml` file already provides everything needed for database setup
 
@@ -92,7 +155,7 @@ $ docker-compose up
 
 Access: `http://localhost:5000`
 
-### Local setup
+#### Local setup
 
 If `postgres_db` does not exist, you can create it manually. Open a terminal and connect to `PostgreSQL`:
 
@@ -114,7 +177,7 @@ psql -U postgres_user -d postgres_db
 postgres_db=# \dt
 ```
 
-## WSGI
+### WSGI
 
 To improve the production-readiness of the `Flask` application, an `WSGI` server like `Gunicorn` is added.
 
@@ -130,4 +193,16 @@ from app import app
 
 if __name__ = "__main__":
   app.run()
+```
+
+### Flask Secret Key
+
+- Always use a strong, unpredictable value for your SECRET_KEY. It should be a long string of random characters.
+
+- You can generate a secret key using tools like Python's secrets module:
+
+```ruby
+import secrets
+
+secret_key = secrets.token_hex(16)  # Generates a random 32-character hex string
 ```
