@@ -43,6 +43,22 @@ Deployment is **automated** through **Github Actions** with:
 10. **Slack** notifications for success/failures scenarios on Docker images security and best practices.
 11. **Slack** notifications for success/failures scenarios on Deployment.
 
+## Reusable workflows
+
+- The `build-validate-push.yml` file encapsulates the entire process of **Build, Validate and Push for Docker images**, allowing for reuse on multiple images.
+
+- **Parameterization**: Each job calls the reusable workflow with **different** parameters (e.g., **image name** and **working directory**), eliminating redundancy.
+
+- **Parallelizing** jobs that don’t need to be sequential (e.g., multiple builds for different images) could be really beneficial for performance.
+
+- This structure makes the workflow more **maintainable** and **scalable** as the project grows.
+
+### Potential Workflow Call Overheads
+
+- Drawback: Calling a reusable workflow introduces a slight overhead compared to having all the steps directly in the main workflow. This might not be noticeable on smaller projects but could become an issue if you have many reusable workflows and job transitions.
+
+- Solution: Consider the **tradeoff between modularity and performance**. For **critical-path** tasks where time matters, consider **inlining the most performance-critical steps** into the main workflow to avoid overhead.
+
 ## Provision Infrastructure
 
 ### Docker Images (build/push)
