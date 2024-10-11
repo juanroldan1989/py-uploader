@@ -13,14 +13,16 @@ services:
       - "5432:5432"
 
   flask_app:
-    build: .
+    build:
+      context: .
+      dockerfile: flask/Dockerfile
     volumes:
       - .:/app
     ports:
       - "5000:5000"
     environment:
       FLASK_SECRET: "flask_secret key"
-      FLASK_ENV: development
+      FLASK_ENV: production
 
       AWS_ACCESS_KEY: "aws_access_key"
       AWS_SECRET_KEY: "aws_secret_key"

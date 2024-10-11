@@ -2,9 +2,9 @@
 
 The app interacts with a PostgreSQL database, stores files in an S3 bucket, and presents a UI to users.
 
-# Production
+# Automation pipeline
 
-Application deployment is automated through **Github Actions** with:
+Deployment is **automated** through **Github Actions** with:
 
 1. Flask source code **linting** validation and **tests**
 2. Infrastructure provisioning through **Terraform**

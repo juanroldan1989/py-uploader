@@ -62,7 +62,7 @@ EXPOSE 5000
 USER nonrootuser
 
 # Set the entrypoint to run the script
-ENTRYPOINT ["/app/entrypoint.sh"]
+ENTRYPOINT ["flask/entrypoint.sh"]
 
 # Run the Flask application
 # CMD ["flask", "run"]
