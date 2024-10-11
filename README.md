@@ -1,4 +1,23 @@
-# Py Uploader
+<h4 align="center">Image Uploader | S3/Postgres integration | E2E Deployment through Github Actions | Terraform </h4>
+
+<p align="center">
+  <a href="https://github.com/juanroldan1989/py-uploader/commits/main">
+  <img src="https://img.shields.io/github/last-commit/juanroldan1989/py-uploader.svg?style=flat-square&logo=github&logoColor=white" alt="GitHub last commit">
+  <a href="https://github.com/juanroldan1989/py-uploader/issues">
+  <img src="https://img.shields.io/github/issues-raw/juanroldan1989/py-uploader.svg?style=flat-square&logo=github&logoColor=white" alt="GitHub issues">
+  <a href="https://github.com/juanroldan1989/py-uploader/pulls">
+  <img src="https://img.shields.io/github/issues-pr-raw/juanroldan1989/py-uploader.svg?style=flat-square&logo=github&logoColor=white" alt="GitHub pull requests">
+  <a href="https://github.com/juanroldan1989/py-uploader/blob/main/LICENSE">
+    <img src="https://img.shields.io/badge/license-MIT-brightgreen.svg">
+  </a>
+</p>
+
+<p align="center">
+  <a href="#automation_pipeline">Automation Pipeline</a> •
+  <a href="#dockerfile">Dockerfile</a> •
+  <a href="#development">Development</a>  •
+  <a href="#contribute">Contribute</a>
+</p>
 
 The app interacts with a PostgreSQL database, stores files in an S3 bucket, and presents a UI to users.
 
@@ -210,3 +229,13 @@ import secrets
 
 secret_key = secrets.token_hex(16)  # Generates a random 32-character hex string
 ```
+
+# Contribute
+
+Got **something interesting** you'd like to **add or change**? Please feel free to [Open a Pull Request](https://github.com/juanroldan1989/py-uploader/pulls)
+
+If you want to say **thank you** and/or support the active development of `Py Uploader`:
+
+1. Add a [GitHub Star](https://github.com/juanroldan1989/py-uploader/stargazers) to the project.
+2. Tweet about the project [on your Twitter](https://twitter.com/intent/tweet?text=Hey%20I've%20just%20discovered%20this%20cool%20app%20on%20Github%20by%20@JhonnyDaNiro%20-%20Python%20Uploader%20S3&url=https://github.com/juanroldan1989/py-uploader/&via=Github).
+3. Write a review or tutorial on [Medium](https://medium.com), [Dev.to](https://dev.to) or personal blog.
